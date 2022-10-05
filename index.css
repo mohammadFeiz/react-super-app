@@ -1,0 +1,107 @@
+.super-app{
+  position:fixed;
+  width:calc(100%);
+  left:0;
+  top:0;
+  height:calc(100%);
+  border-radius:24px;
+  border:12px solid #ddd;
+}
+.loading {
+  z-index: 100000000000000;
+  position: absolute;
+  direction: ltr;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  align-items: center;
+  background: rgba(0, 0, 0, .6)
+}
+
+@keyframes loadingScaleY {
+
+  0%,
+  40%,
+  100% {
+    transform: scaleY(1);
+
+  }
+
+  20% {
+    transform: scaleY(1.6);
+  }
+}
+
+.cube {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+.superapp-header{
+  height:72px;
+  width:100%;
+  background:#fff;
+  padding:0 24px;
+}
+.superapp-header-title {
+  font-size: 20px;
+  font-weight:bold;
+  color:#323130;
+}
+.superapp-header-username{
+  font-size:16px;
+  color:#605E5C;
+}
+.superapp-sidemenu{
+  background:#0094D4;
+}
+
+.superapp-sidemenu-item{
+  margin:0 12px;
+  border-radius:6px;
+  font-size:16px;
+  color:#fff;
+}
+.superapp-sidemenu-item.active{
+  color:#005478;
+  background:#DEF1F9;
+}
+.superapp-sidemenu-title{
+  color:#FFF;
+  font-weight:bold;
+  font-size:20px;
+}
+.superapp-sidemenu-subtitle{
+  color:#FFF;
+  font-size:14px;
+}
+.superapp-popup-container{
+  position:fixed;
+  width:calc(100%);
+  left:0;
+  top:0;
+  height:calc(100%);
+  background:rgba(0,0,0,0.4);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  z-index:10;
+}
+.superapp-poppup{
+  background:#fff;
+  width:90%;
+  height:90%;
+  border-radius:12px;
+  box-shadow:2px 2px 12px 3px rgb(0 0 0 / 30%)
+}
+.superapp-popup-header{
+  background:#DDD;
+  color:#323130;
+}
+.superapp-popup-title{
+  padding:0 24px;
+  font-size:20px;
+}
