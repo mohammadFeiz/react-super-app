@@ -54,7 +54,7 @@ export default class SuperApp extends Component {
     render() {
       return (
         <>
-          <RVD layout={{className: 'super-app',row: [this.side_layout(),this.page_layout()]}}/>
+          <RVD layout={{className: 'superapp',row: [this.side_layout(),this.page_layout()]}}/>
           <Loading />
         </>
       );

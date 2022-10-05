@@ -109,7 +109,7 @@ class SuperApp extends _react.Component {
   render() {
     return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
       layout: {
-        className: 'super-app',
+        className: 'superapp',
         row: [this.side_layout(), this.page_layout()]
       }
     }), /*#__PURE__*/_react.default.createElement(Loading, null));
