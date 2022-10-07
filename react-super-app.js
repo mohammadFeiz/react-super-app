@@ -9,7 +9,10 @@ import './index.css';
 export default class SuperApp extends Component {
     constructor(props){
       super(props);
-      this.state = {activeSideIndex:0}
+      this.state = {
+        activeSideIndex:0,confirm:false,
+        setConfirm:(confirm)=>this.setState({confirm})
+      }
     }
     side_layout() {
       let {sideMenuItems,logo,title,subtitle} = this.props;
@@ -25,13 +28,12 @@ export default class SuperApp extends Component {
       };
     }
     page_layout(){
-        let {activeSideIndex} = this.state;
         let {getContent} = this.props;
         return {
             flex:1,
             column:[
                 this.header_layout(),
-                {flex:1,html:getContent(activeSideIndex)}
+                {flex:1,html:getContent(this.state)}
             ]
         } 
     }
@@ -52,9 +54,11 @@ export default class SuperApp extends Component {
         }
     }
     render() {
+      let {confirm} = this.state;
       return (
         <>
           <RVD layout={{className: 'superapp',row: [this.side_layout(),this.page_layout()]}}/>
+          {confirm && <Confirm {...confirm} onClose={()=>this.setState({confirm:false})}/>}
           <Loading />
         </>
       );
@@ -188,6 +192,56 @@ export class Popup extends Component{
       return (  
         <div className='superapp-popup-container'>
           <RVD layout={{className:'superapp-poppup',style:{flex:'none'},column:[this.header_layout(),this.body_layout()]}}/>  
+        </div>
+      )
+    }
+  }
+
+
+  export class Confirm extends Component{
+    constructor(props){
+      super(props);
+    }
+    header_layout(){
+      let {onClose,title} = this.props;
+      if(!title){return false}
+      return {
+        size:48,className:'superapp-popup-header',
+        row:[
+          {flex:1,html:title,align:'v',className:'superapp-popup-title'},
+          {size:48,html:<Icon path={mdiClose} size={0.8}/>,align:'vh',attrs:{onClick:()=>onClose()}}
+        ]
+      }
+    }
+    body_layout(){
+      let {text} = this.props;
+      return {flex:1,html:text,scroll:'v'}
+    }
+    onSubmit(){
+      let {onClose,onSubmit} = this.props;
+      onSubmit();
+      onClose();
+    }
+    footer_layout(){
+      let {onClose,onSubmit,closeText = 'No',submitText = 'Yes'} = this.props;
+      return {
+        gap:12,
+        size:48,
+        align:'v',
+        style:{padding:'0 12px'},
+        row:[
+          {flex:1},
+          {html:<button className='superapp-popup-footer-button' onClick={()=>onClose()}>{closeText}</button>},
+          {show:!!onSubmit,html:<button className='superapp-popup-footer-button' onClick={()=>this.onSubmit()}>{submitText}</button>},
+          {flex:1}
+        ]
+      }
+    }
+    render(){
+      let {style = {width:400,height:300}} = this.props;
+      return (  
+        <div className='superapp-popup-container'>
+          <RVD layout={{className:'superapp-poppup',style:{flex:'none',...style},column:[this.header_layout(),this.body_layout(),this.footer_layout()]}}/>  
         </div>
       )
     }

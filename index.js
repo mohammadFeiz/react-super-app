@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.Popup = void 0;
+exports.default = exports.Popup = exports.Confirm = void 0;
 exports.splitNumber = splitNumber;
 
 var _react = _interopRequireWildcard(require("react"));
@@ -24,11 +24,17 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 class SuperApp extends _react.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSideIndex: 0
+      activeSideIndex: 0,
+      confirm: false,
+      setConfirm: confirm => this.setState({
+        confirm
+      })
     };
   }
 
@@ -59,16 +65,13 @@ class SuperApp extends _react.Component {
 
   page_layout() {
     let {
-      activeSideIndex
-    } = this.state;
-    let {
       getContent
     } = this.props;
     return {
       flex: 1,
       column: [this.header_layout(), {
         flex: 1,
-        html: getContent(activeSideIndex)
+        html: getContent(this.state)
       }]
     };
   }
@@ -107,12 +110,19 @@ class SuperApp extends _react.Component {
   }
 
   render() {
+    let {
+      confirm
+    } = this.state;
     return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
       layout: {
         className: 'superapp',
         row: [this.side_layout(), this.page_layout()]
       }
-    }), /*#__PURE__*/_react.default.createElement(Loading, null));
+    }), confirm && /*#__PURE__*/_react.default.createElement(Confirm, _extends({}, confirm, {
+      onClose: () => this.setState({
+        confirm: false
+      })
+    })), /*#__PURE__*/_react.default.createElement(Loading, null));
   }
 
 }
@@ -413,3 +423,118 @@ class Popup extends _react.Component {
 }
 
 exports.Popup = Popup;
+
+class Confirm extends _react.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  header_layout() {
+    let {
+      onClose,
+      title
+    } = this.props;
+
+    if (!title) {
+      return false;
+    }
+
+    return {
+      size: 48,
+      className: 'superapp-popup-header',
+      row: [{
+        flex: 1,
+        html: title,
+        align: 'v',
+        className: 'superapp-popup-title'
+      }, {
+        size: 48,
+        html: /*#__PURE__*/_react.default.createElement(_react2.Icon, {
+          path: _js.mdiClose,
+          size: 0.8
+        }),
+        align: 'vh',
+        attrs: {
+          onClick: () => onClose()
+        }
+      }]
+    };
+  }
+
+  body_layout() {
+    let {
+      text
+    } = this.props;
+    return {
+      flex: 1,
+      html: text,
+      scroll: 'v'
+    };
+  }
+
+  onSubmit() {
+    let {
+      onClose,
+      onSubmit
+    } = this.props;
+    onSubmit();
+    onClose();
+  }
+
+  footer_layout() {
+    let {
+      onClose,
+      onSubmit,
+      closeText = 'No',
+      submitText = 'Yes'
+    } = this.props;
+    return {
+      gap: 12,
+      size: 48,
+      align: 'v',
+      style: {
+        padding: '0 12px'
+      },
+      row: [{
+        flex: 1
+      }, {
+        html: /*#__PURE__*/_react.default.createElement("button", {
+          className: "superapp-popup-footer-button",
+          onClick: () => onClose()
+        }, closeText)
+      }, {
+        show: !!onSubmit,
+        html: /*#__PURE__*/_react.default.createElement("button", {
+          className: "superapp-popup-footer-button",
+          onClick: () => this.onSubmit()
+        }, submitText)
+      }, {
+        flex: 1
+      }]
+    };
+  }
+
+  render() {
+    let {
+      style = {
+        width: 400,
+        height: 300
+      }
+    } = this.props;
+    return /*#__PURE__*/_react.default.createElement("div", {
+      className: "superapp-popup-container"
+    }, /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
+      layout: {
+        className: 'superapp-poppup',
+        style: {
+          flex: 'none',
+          ...style
+        },
+        column: [this.header_layout(), this.body_layout(), this.footer_layout()]
+      }
+    }));
+  }
+
+}
+
+exports.Confirm = Confirm;

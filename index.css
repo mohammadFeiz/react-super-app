@@ -138,3 +138,12 @@
   padding:0 24px;
   font-size:20px;
 }
+.superapp-popup-footer-button{
+  height:36px;
+  background:dodgerblue;
+  border:none;
+  padding:0 24px;
+  color:#fff;
+  font-family:inherit;
+  border-radius:4px;
+}
