@@ -30,7 +30,7 @@ class SuperApp extends _react.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSideIndex: 0,
+      activeNavigationIndex: 0,
       confirm: false,
       setConfirm: confirm => this.setState({
         confirm
@@ -38,26 +38,26 @@ class SuperApp extends _react.Component {
     };
   }
 
-  side_layout() {
+  navigation_layout() {
     let {
-      sideMenuItems,
+      navigationItems,
       logo,
       title,
       subtitle
     } = this.props;
     let {
-      activeSideIndex
+      activeNavigationIndex
     } = this.state;
     return {
       size: 240,
-      html: /*#__PURE__*/_react.default.createElement(Side, {
-        items: sideMenuItems,
+      html: /*#__PURE__*/_react.default.createElement(Navigation, {
+        items: navigationItems,
         logo: logo,
         title: title,
         subtitle: subtitle,
-        activeIndex: activeSideIndex,
-        onChange: activeSideIndex => this.setState({
-          activeSideIndex
+        activeIndex: activeNavigationIndex,
+        onChange: activeNavigationIndex => this.setState({
+          activeNavigationIndex
         })
       })
     };
@@ -78,11 +78,11 @@ class SuperApp extends _react.Component {
 
   header_layout() {
     let {
-      sideMenuItems,
+      navigationItems,
       userName
     } = this.props;
     let {
-      activeSideIndex
+      activeNavigationIndex
     } = this.state;
     return {
       style: {
@@ -91,7 +91,7 @@ class SuperApp extends _react.Component {
       align: 'v',
       className: 'superapp-header',
       row: [{
-        html: sideMenuItems[activeSideIndex].text,
+        html: navigationItems[activeNavigationIndex].text,
         className: 'superapp-header-title'
       }, {
         flex: 1
@@ -111,12 +111,20 @@ class SuperApp extends _react.Component {
 
   render() {
     let {
+      touch
+    } = this.props;
+
+    if (touch) {
+      return /*#__PURE__*/_react.default.createElement(SuperAppTouch, this.props);
+    }
+
+    let {
       confirm
     } = this.state;
     return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
       layout: {
         className: 'superapp',
-        row: [this.side_layout(), this.page_layout()]
+        row: [this.navigation_layout(), this.page_layout()]
       }
     }), confirm && /*#__PURE__*/_react.default.createElement(Confirm, _extends({}, confirm, {
       onClose: () => this.setState({
@@ -129,7 +137,99 @@ class SuperApp extends _react.Component {
 
 exports.default = SuperApp;
 
-class Side extends _react.Component {
+class SuperAppTouch extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeNavigationIndex: 0,
+      confirm: false,
+      touch: true,
+      setConfirm: confirm => this.setState({
+        confirm
+      })
+    };
+  }
+
+  navigation_layout() {
+    let {
+      navigationItems
+    } = this.props;
+    let {
+      activeNavigationIndex
+    } = this.state;
+    return {
+      html: /*#__PURE__*/_react.default.createElement(NavigationTouch, {
+        items: navigationItems,
+        activeIndex: activeNavigationIndex,
+        onChange: activeNavigationIndex => this.setState({
+          activeNavigationIndex
+        })
+      })
+    };
+  }
+
+  page_layout() {
+    let {
+      getContent
+    } = this.props;
+    return {
+      flex: 1,
+      column: [this.header_layout(), {
+        flex: 1,
+        html: getContent(this.state)
+      }]
+    };
+  }
+
+  header_layout() {
+    let {
+      navigationItems,
+      userName
+    } = this.props;
+    let {
+      activeNavigationIndex
+    } = this.state;
+    return {
+      style: {
+        flex: 'none'
+      },
+      align: 'v',
+      className: 'superapp-header touch-mode',
+      row: [{
+        flex: 1,
+        html: navigationItems[activeNavigationIndex].text,
+        className: 'superapp-header-title'
+      }, {
+        html: /*#__PURE__*/_react.default.createElement(_react2.Icon, {
+          path: _js.mdiAccount,
+          size: 1
+        }),
+        attrs: {
+          title: userName
+        }
+      }]
+    };
+  }
+
+  render() {
+    let {
+      confirm
+    } = this.state;
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
+      layout: {
+        className: 'superapp',
+        column: [this.page_layout(), this.navigation_layout()]
+      }
+    }), confirm && /*#__PURE__*/_react.default.createElement(Confirm, _extends({}, confirm, {
+      onClose: () => this.setState({
+        confirm: false
+      })
+    })), /*#__PURE__*/_react.default.createElement(Loading, null));
+  }
+
+}
+
+class Navigation extends _react.Component {
   header_layout() {
     let {
       logo,
@@ -147,11 +247,11 @@ class Side extends _react.Component {
           flex: 1
         }, {
           html: title,
-          className: 'superapp-sidemenu-title'
+          className: 'superapp-navigation-title'
         }, {
           html: subtitle,
           show: !!subtitle,
-          className: 'superapp-sidemenu-subtitle'
+          className: 'superapp-navigation-subtitle'
         }, {
           flex: 1
         }]
@@ -174,7 +274,7 @@ class Side extends _react.Component {
         let active = i === activeIndex;
         return {
           size: 36,
-          className: 'superapp-sidemenu-item' + (active ? ' active' : ''),
+          className: 'superapp-navigation-item' + (active ? ' active' : ''),
           attrs: {
             onClick: () => onChange(i)
           },
@@ -195,12 +295,43 @@ class Side extends _react.Component {
   render() {
     return /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
       layout: {
-        className: 'superapp-sidemenu',
+        className: 'superapp-navigation',
         column: [{
           size: 24
         }, this.header_layout(), {
           size: 24
         }, this.items_layout()]
+      }
+    });
+  }
+
+}
+
+class NavigationTouch extends _react.Component {
+  render() {
+    let {
+      items,
+      onChange,
+      activeIndex
+    } = this.props;
+    return /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
+      layout: {
+        className: 'superapp-bottom-menu',
+        row: items.map(({
+          icon,
+          text
+        }, i) => {
+          let active = i === activeIndex;
+          return {
+            flex: 1,
+            className: 'superapp-bottom-menu-item' + (active ? ' active' : ''),
+            attrs: {
+              onClick: () => onChange(i)
+            },
+            html: icon(active),
+            align: 'vh'
+          };
+        })
       }
     });
   }

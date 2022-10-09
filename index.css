@@ -79,35 +79,58 @@
   background:#fff;
   padding:0 24px;
 }
+.superapp-header.touch-mode{
+    height:48px;
+    width:100%;
+    background:#fff;
+    padding:0 24px;
+    border-bottom:1px solid #ddd;
+  }
 .superapp-header-title {
   font-size: 20px;
   font-weight:bold;
   color:#323130;
 }
+.superapp-header.touch-mode .superapp-header-title {
+    font-size: 16px !important;
+    font-weight:bold;
+    color:#323130;
+  }
 .superapp-header-username{
   font-size:16px;
   color:#605E5C;
 }
-.superapp-sidemenu{
+.superapp-navigation{
   background:#0094D4;
 }
 
-.superapp-sidemenu-item{
+.superapp-navigation-item{
   margin:0 12px;
   border-radius:6px;
   font-size:16px;
   color:#fff;
 }
-.superapp-sidemenu-item.active{
+.superapp-bottom-menu{
+    border-top:1px solid #ddd;
+    height:48px;
+  }
+.superapp-navigation-item.active{
   color:#005478;
   background:#DEF1F9;
 }
-.superapp-sidemenu-title{
+.superapp-bottom-menu-item{
+    font-size:18px;
+}
+  .superapp-bottom-menu-item.active{
+    color:#fff;
+    background:dodgerblue;
+  }
+.superapp-navigation-title{
   color:#FFF;
   font-weight:bold;
   font-size:20px;
 }
-.superapp-sidemenu-subtitle{
+.superapp-navigation-subtitle{
   color:#FFF;
   font-size:14px;
 }

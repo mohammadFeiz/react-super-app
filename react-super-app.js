@@ -5,24 +5,23 @@ import {mdiAccount,mdiClose} from '@mdi/js';
 import RVD from 'react-virtual-dom';
 import './index.css';
 
-
 export default class SuperApp extends Component {
     constructor(props){
       super(props);
       this.state = {
-        activeSideIndex:0,confirm:false,
+        activeNavigationIndex:0,confirm:false,
         setConfirm:(confirm)=>this.setState({confirm})
       }
     }
-    side_layout() {
-      let {sideMenuItems,logo,title,subtitle} = this.props;
-      let {activeSideIndex} = this.state;
+    navigation_layout() {
+      let {navigationItems,logo,title,subtitle} = this.props;
+      let {activeNavigationIndex} = this.state;
       return {
         size: 240,
         html: (
-          <Side 
-            items={sideMenuItems} logo={logo} title={title} subtitle={subtitle} activeIndex={activeSideIndex} 
-            onChange={(activeSideIndex)=>this.setState({activeSideIndex})}
+          <Navigation 
+            items={navigationItems} logo={logo} title={title} subtitle={subtitle} activeIndex={activeNavigationIndex} 
+            onChange={(activeNavigationIndex)=>this.setState({activeNavigationIndex})}
           />
         )
       };
@@ -38,14 +37,14 @@ export default class SuperApp extends Component {
         } 
     }
     header_layout(){
-        let {sideMenuItems,userName} = this.props;
-        let {activeSideIndex} = this.state;
+        let {navigationItems,userName} = this.props;
+        let {activeNavigationIndex} = this.state;
         return {
           style:{flex:'none'},
           align:'v',
           className:'superapp-header',
           row:[
-            {html:sideMenuItems[activeSideIndex].text,className:'superapp-header-title'},
+            {html:navigationItems[activeNavigationIndex].text,className:'superapp-header-title'},
             {flex:1},
             {html:<Icon path={mdiAccount} size={1}/>},
             {size:6},
@@ -54,17 +53,73 @@ export default class SuperApp extends Component {
         }
     }
     render() {
+        let {touch} = this.props;
+        if(touch){return <SuperAppTouch {...this.props}/>}
+        let {confirm} = this.state;
+        return (
+            <>
+            <RVD layout={{className: 'superapp',row: [this.navigation_layout(),this.page_layout()]}}/>
+            {confirm && <Confirm {...confirm} onClose={()=>this.setState({confirm:false})}/>}
+            <Loading />
+            </>
+        );
+    }
+  }
+  class SuperAppTouch extends Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        activeNavigationIndex:0,confirm:false,touch:true,
+        setConfirm:(confirm)=>this.setState({confirm})
+      }
+    }
+    navigation_layout() {
+      let {navigationItems} = this.props;
+      let {activeNavigationIndex} = this.state;
+      return {
+        html: (
+          <NavigationTouch 
+            items={navigationItems} activeIndex={activeNavigationIndex}
+            onChange={(activeNavigationIndex)=>this.setState({activeNavigationIndex})}
+          />
+        )
+      };
+    }
+    page_layout(){
+        let {getContent} = this.props;
+        return {
+            flex:1,
+            column:[
+                this.header_layout(),
+                {flex:1,html:getContent(this.state)}
+            ]
+        } 
+    }
+    header_layout(){
+        let {navigationItems,userName} = this.props;
+        let {activeNavigationIndex} = this.state;
+        return {
+            style:{flex:'none'},
+            align:'v',
+            className:'superapp-header touch-mode',
+            row:[
+                {flex:1,html:navigationItems[activeNavigationIndex].text,className:'superapp-header-title'},
+                {html:<Icon path={mdiAccount} size={1}/>,attrs:{title:userName}},
+            ]
+        }
+    }
+    render() {
       let {confirm} = this.state;
       return (
         <>
-          <RVD layout={{className: 'superapp',row: [this.side_layout(),this.page_layout()]}}/>
+          <RVD layout={{className: 'superapp',column: [this.page_layout(),this.navigation_layout()]}}/>
           {confirm && <Confirm {...confirm} onClose={()=>this.setState({confirm:false})}/>}
           <Loading />
         </>
       );
     }
   }
-  class Side extends Component {
+  class Navigation extends Component {
     header_layout() {
       let {logo,title,subtitle} = this.props;
       return {
@@ -74,8 +129,8 @@ export default class SuperApp extends Component {
           {
             column: [
               { flex: 1 },
-              { html: title, className: 'superapp-sidemenu-title' },
-              { html: subtitle,show:!!subtitle, className: 'superapp-sidemenu-subtitle' },
+              { html: title, className: 'superapp-navigation-title' },
+              { html: subtitle,show:!!subtitle, className: 'superapp-navigation-subtitle' },
               { flex: 1 },
             ],
           },
@@ -89,7 +144,7 @@ export default class SuperApp extends Component {
         column:items.map(({icon,text},i)=>{
           let active = i === activeIndex;
           return {
-            size:36,className:'superapp-sidemenu-item' + (active?' active':''),attrs:{onClick:()=>onChange(i)},
+            size:36,className:'superapp-navigation-item' + (active?' active':''),attrs:{onClick:()=>onChange(i)},
             row:[
               {show:!!icon,size:48,html:icon(active),align:'vh'},
               {html:text,align:'v'}
@@ -99,9 +154,28 @@ export default class SuperApp extends Component {
       }
     }
     render() {
-      return (<RVD layout={{className: 'superapp-sidemenu',column: [{size:24},this.header_layout(),{size:24},this.items_layout()]}}/>);
+      return (<RVD layout={{className: 'superapp-navigation',column: [{size:24},this.header_layout(),{size:24},this.items_layout()]}}/>);
     }
   }
+  class NavigationTouch extends Component {
+    render() {
+        let {items,onChange,activeIndex} = this.props;
+        return (
+            <RVD 
+                layout={{
+                    className: 'superapp-bottom-menu',
+                    row: items.map(({icon,text},i)=>{
+                        let active = i === activeIndex;
+                        return {
+                            flex:1,className:'superapp-bottom-menu-item' + (active?' active':''),attrs:{onClick:()=>onChange(i)},
+                            html:icon(active),align:'vh'
+                        }
+                    })
+                }}
+            />
+        );
+    }
+}
 
   class Loading extends Component{
     cubes2(obj = {}){
