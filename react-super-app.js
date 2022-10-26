@@ -6,7 +6,7 @@ import RVD from 'react-virtual-dom';
 import $ from 'jquery';
 import './index.css';
 
-export default class SuperApp extends Component {
+export default class ReactSuperApp extends Component {
     constructor(props){
       super(props);
       let {touch = 'ontouchstart' in document.documentElement} = this.props;
@@ -24,7 +24,7 @@ export default class SuperApp extends Component {
         },
         setConfirm:(confirm)=>this.setState({confirm}),
       }
-      props.getActions({...this.state})
+      if(props.getActions){props.getActions({...this.state})}
     }
     getNavId(){
       let {navs,navId} = this.props;
@@ -99,7 +99,7 @@ export default class SuperApp extends Component {
           return {
             size:36,className:'rsa-navigation-item' + (active?' active':''),attrs:{onClick:()=>onChange(id)},
             row:[
-              {show:!!icon,size:48,html:icon(active),align:'vh'},
+              {show:!!icon,size:48,html:()=>icon(active),align:'vh'},
               {html:text,align:'v'}
             ]
           }

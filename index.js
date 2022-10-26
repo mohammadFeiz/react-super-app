@@ -17,7 +17,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-class SuperApp extends _react.Component {
+class ReactSuperApp extends _react.Component {
   constructor(props) {
     super(props);
     let {
@@ -45,9 +45,11 @@ class SuperApp extends _react.Component {
         confirm
       })
     };
-    props.getActions({
-      ...this.state
-    });
+    if (props.getActions) {
+      props.getActions({
+        ...this.state
+      });
+    }
   }
   getNavId() {
     let {
@@ -197,7 +199,7 @@ class SuperApp extends _react.Component {
     }), /*#__PURE__*/_react.default.createElement(Loading, null));
   }
 }
-exports.default = SuperApp;
+exports.default = ReactSuperApp;
 class Navigation extends _react.Component {
   header_layout() {
     let {
@@ -250,7 +252,7 @@ class Navigation extends _react.Component {
           row: [{
             show: !!icon,
             size: 48,
-            html: icon(active),
+            html: () => icon(active),
             align: 'vh'
           }, {
             html: text,
