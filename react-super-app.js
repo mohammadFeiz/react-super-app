@@ -41,7 +41,7 @@ export default class ReactSuperApp extends Component {
             layout={{
               column:[
                 {size:12},
-                {html:<Icon path={path} size={3}/>,style:{color},align:'vh'},
+                {html:<Icon path={path} size={2}/>,style:{color},align:'vh'},
                 {size:12},
                 {html:text,style:{color},align:'vh'},
                 {size:12},
@@ -50,7 +50,7 @@ export default class ReactSuperApp extends Component {
             }}
           />
         )
-        confirm = {text:body,style:{background:'#fff',height:'fit-content',width:400},buttons:[{text:'بستن'}],backClose:true}
+        confirm = {text:body,style:{background:'#fff',height:'fit-content',width:360},buttons:[{text:'بستن'}],backClose:true}
       }
       else{confirm = obj;}
       this.setState({confirm})
@@ -140,7 +140,12 @@ export default class ReactSuperApp extends Component {
       let active = id === navId;
       return {
           flex:1,className:'rsa-bottom-menu-item' + (active?' active':''),attrs:{onClick:()=>onChange(id)},
-          html:icon(active),align:'vh'
+          column:[
+            {flex:1},
+            {html:icon(active),align:'vh'},
+            {html:text,align:'vh',className:'rsa-bottom-menu-item-text'},
+            {flex:1}
+          ]
       }
     }
     render() {

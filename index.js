@@ -80,7 +80,7 @@ class ReactSuperApp extends _react.Component {
           }, {
             html: /*#__PURE__*/_react.default.createElement(_react2.Icon, {
               path: path,
-              size: 3
+              size: 2
             }),
             style: {
               color
@@ -108,7 +108,7 @@ class ReactSuperApp extends _react.Component {
         style: {
           background: '#fff',
           height: 'fit-content',
-          width: 400
+          width: 360
         },
         buttons: [{
           text: 'بستن'
@@ -349,8 +349,18 @@ class Navigation extends _react.Component {
       attrs: {
         onClick: () => onChange(id)
       },
-      html: icon(active),
-      align: 'vh'
+      column: [{
+        flex: 1
+      }, {
+        html: icon(active),
+        align: 'vh'
+      }, {
+        html: text,
+        align: 'vh',
+        className: 'rsa-bottom-menu-item-text'
+      }, {
+        flex: 1
+      }]
     };
   }
   render() {
