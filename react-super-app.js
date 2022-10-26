@@ -1,7 +1,7 @@
 import React,{Component,createRef} from 'react';
 import AIOButton from 'aio-button';
 import {Icon} from '@mdi/react';
-import {mdiMenu,mdiClose,mdiChevronRight,mdiChevronLeft} from '@mdi/js';
+import {mdiMenu,mdiClose,mdiChevronRight,mdiChevronLeft,mdiCheckCircleOutline,mdiAlertOutline,mdiInformationOutline} from '@mdi/js';
 import RVD from 'react-virtual-dom';
 import $ from 'jquery';
 import './index.css';
@@ -22,9 +22,38 @@ export default class ReactSuperApp extends Component {
           popups.pop();
           this.setState({popups})
         },
-        setConfirm:(confirm)=>this.setState({confirm}),
+        setConfirm:this.setConfirm.bind(this),
       }
       if(props.getActions){props.getActions({...this.state})}
+    }
+    setConfirm(obj){
+      let confirm;
+      let {type} = obj;
+      if(type){
+        let {text,subtext} = obj;
+        let path,color;
+        if(type === 'success'){path = mdiCheckCircleOutline; color = 'green';}
+        else if(type === 'error'){path = mdiClose; color = 'red';}
+        else if(type === 'warning'){path = mdiAlertOutline; color = 'orange';}
+        else if(type === 'info'){path = mdiInformationOutline; color = 'dodgerblue';}
+        let body = (
+          <RVD
+            layout={{
+              column:[
+                {size:12},
+                {html:<Icon path={path} size={3}/>,style:{color},align:'vh'},
+                {size:12},
+                {html:text,style:{color},align:'vh'},
+                {size:12},
+                {html:subtext,align:'vh',className:'size10'}
+              ]
+            }}
+          />
+        )
+        confirm = {text:body,style:{background:'#fff',height:'fit-content',width:400},buttons:[{text:'بستن'}],backClose:true}
+      }
+      else{confirm = obj;}
+      this.setState({confirm})
     }
     getNavId(){
       let {navs,navId} = this.props;
@@ -308,6 +337,7 @@ class Popup extends Component{
   export class Confirm extends Component{
     constructor(props){
       super(props);
+      this.dui = 'a' + Math.random();
     }
     header_layout(){
       let {onClose,title} = this.props;
@@ -346,11 +376,21 @@ class Popup extends Component{
         }) 
       }
     }
+    backClick(e){
+      let {onClose,backClose} = this.props;
+      if(!backClose){return}
+      let target = $(e.target);
+      if(target.hasClass(this.dui)){return}
+      let parents = target.parents('.rsa-popup');
+      if(parents.hasClass(this.dui)){return}
+      
+      onClose();
+    }
     render(){
       let {style = {width:400,height:300}} = this.props;
       return (  
-        <div className='rsa-popup-container'>
-          <RVD layout={{className:'rsa-popup rsa-confirm',style:{flex:'none',...style},column:[this.header_layout(),this.body_layout(),this.footer_layout()]}}/>  
+        <div className='rsa-popup-container' onClick={(e)=>this.backClick(e)}>
+          <RVD layout={{className:'rsa-popup rsa-confirm' + (' ' + this.dui),style:{flex:'none',...style},column:[this.header_layout(),this.body_layout(),this.footer_layout()]}}/>  
         </div>
       )
     }

@@ -41,15 +41,86 @@ class ReactSuperApp extends _react.Component {
           popups
         });
       },
-      setConfirm: confirm => this.setState({
-        confirm
-      })
+      setConfirm: this.setConfirm.bind(this)
     };
     if (props.getActions) {
       props.getActions({
         ...this.state
       });
     }
+  }
+  setConfirm(obj) {
+    let confirm;
+    let {
+      type
+    } = obj;
+    if (type) {
+      let {
+        text,
+        subtext
+      } = obj;
+      let path, color;
+      if (type === 'success') {
+        path = _js.mdiCheckCircleOutline;
+        color = 'green';
+      } else if (type === 'error') {
+        path = _js.mdiClose;
+        color = 'red';
+      } else if (type === 'warning') {
+        path = _js.mdiAlertOutline;
+        color = 'orange';
+      } else if (type === 'info') {
+        path = _js.mdiInformationOutline;
+        color = 'dodgerblue';
+      }
+      let body = /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
+        layout: {
+          column: [{
+            size: 12
+          }, {
+            html: /*#__PURE__*/_react.default.createElement(_react2.Icon, {
+              path: path,
+              size: 3
+            }),
+            style: {
+              color
+            },
+            align: 'vh'
+          }, {
+            size: 12
+          }, {
+            html: text,
+            style: {
+              color
+            },
+            align: 'vh'
+          }, {
+            size: 12
+          }, {
+            html: subtext,
+            align: 'vh',
+            className: 'size10'
+          }]
+        }
+      });
+      confirm = {
+        text: body,
+        style: {
+          background: '#fff',
+          height: 'fit-content',
+          width: 400
+        },
+        buttons: [{
+          text: 'بستن'
+        }],
+        backClose: true
+      };
+    } else {
+      confirm = obj;
+    }
+    this.setState({
+      confirm
+    });
   }
   getNavId() {
     let {
@@ -685,6 +756,7 @@ class Popup extends _react.Component {
 class Confirm extends _react.Component {
   constructor(props) {
     super(props);
+    this.dui = 'a' + Math.random();
   }
   header_layout() {
     let {
@@ -762,6 +834,24 @@ class Confirm extends _react.Component {
       })
     };
   }
+  backClick(e) {
+    let {
+      onClose,
+      backClose
+    } = this.props;
+    if (!backClose) {
+      return;
+    }
+    let target = (0, _jquery.default)(e.target);
+    if (target.hasClass(this.dui)) {
+      return;
+    }
+    let parents = target.parents('.rsa-popup');
+    if (parents.hasClass(this.dui)) {
+      return;
+    }
+    onClose();
+  }
   render() {
     let {
       style = {
@@ -770,10 +860,11 @@ class Confirm extends _react.Component {
       }
     } = this.props;
     return /*#__PURE__*/_react.default.createElement("div", {
-      className: "rsa-popup-container"
+      className: "rsa-popup-container",
+      onClick: e => this.backClick(e)
     }, /*#__PURE__*/_react.default.createElement(_reactVirtualDom.default, {
       layout: {
-        className: 'rsa-popup rsa-confirm',
+        className: 'rsa-popup rsa-confirm' + (' ' + this.dui),
         style: {
           flex: 'none',
           ...style
