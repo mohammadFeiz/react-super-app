@@ -80,7 +80,7 @@ export default class ReactSuperApp extends Component {
           row:[
             {show:!!sides.length,html:<Icon path={mdiMenu} size={1}/>,align:'vh',attrs:{onClick:()=>this.setState({sideOpen:!this.state.sideOpen})}},
             {show:!!sides.length,size:12},
-            {flex:1,html:nav.text,className:'rsa-header-title'},
+            {flex:1,html:nav.headerText || nav.text,className:'rsa-header-title'},
             {show:!!header,html:()=>header(this.state)} 
           ]
         }

@@ -210,7 +210,7 @@ class ReactSuperApp extends _react.Component {
         size: 12
       }, {
         flex: 1,
-        html: nav.text,
+        html: nav.headerText || nav.text,
         className: 'rsa-header-title'
       }, {
         show: !!header,
