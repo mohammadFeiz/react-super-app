@@ -31,14 +31,37 @@
 	url('./iransans/woff/IRANSansWeb(FaNum)_Medium.woff') format('woff'), 
 	url('./iransans/ttf/IRANSansWeb(FaNum)_Medium.ttf') format('truetype');
 }
-
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+}
+.rsa-container{
+  position:fixed;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	display:flex;
+	justify-content: center;
+}
 .rsa{
   font-family:IRANSans-light;
-    position:fixed;
+  position:fixed;
   width:calc(100%);
   left:0;
   top:0;
   height:calc(100%);
+  filter:blur(0);
+  overflow:hidden;
+}
+.rsa-main{
+  position:absolute;
+  width:100%;
+  height:100%;
+  left:0;
+  top:0;
+}
+.rsa-blur{
+  filter:blur(5px);
 }
 .rsa.rtl{
   direction:rtl;
@@ -77,102 +100,77 @@
   color: #fff;
 }
 .rsa-header{
-  height:72px;
+  height:60px;
   width:100%;
   background:#fff;
-  padding:0 24px;
   border-bottom:1px solid #ddd;
-}
-.rsa-header.touch-mode{
-    height:48px;
-    width:100%;
-    background:#fff;
-    padding:0 24px;
-    border-bottom:1px solid #ddd;
-  }
-.rsa-header-title {
-  font-size: 20px;
-  font-weight:bold;
   color:#323130;
+  padding:0 12px;
 }
-.rsa-header.touch-mode .rsa-header-title {
-    font-size: 16px !important;
-    font-weight:bold;
-    color:#323130;
-  }
+.rsa-header-title {
+  font-size: 16px;
+  font-weight:bold;
+}
+.rsa-header-subtitle {
+  font-size: 12px;
+  opacity:0.7;
+}
 .rsa-header-username{
   font-size:16px;
   color:#605E5C;
 }
 .rsa-navigation{
-  background:#0094D4;
+  background:dodgerblue;
   width:240px;
 }
-.rsa-sidemenu-container{
-  position:fixed;
-  width:calc(100% + 240px);
-  height:100%;
-  top:0;
-  background:rgba(0,0,0,0.2)
-}
-.rsa-sidemenu-container.ltr{
-  left:-240px;
-  direction:ltr;
-}
-.rsa-sidemenu-container.ltr.open{
-  transition:0.3s;
-  left:0;
-}
-.rsa-sidemenu-container.rtl{
-  right:-240px;
-  direction:rtl;
-}
 
 
-.rsa-sidemenu-container.rtl.open{
-  transition:0.3s;
-  right:0;
-}
 
 .rsa-sidemenu{
-  background:#eee;
+  background:#fff;
   color:#666;
   width:240px;
+  height:100%;
   box-shadow:2px 2px 11px 0 rgb(0 0 0 / 16%)
 }
-
+.rsa-sidemenu-header{
+  min-height: 24px;
+}
 .rsa-sidemenu-item{
-  margin:0 12px;
   border-radius:6px;
-  font-size:16px;
+  font-size:14px;
 }
-.rsa-sidemenu-item.active{
-  color:dodgerblue;
-  font-weight: bold;
-}
+
 .rsa-navigation-item{
   margin:0 12px;
   border-radius:6px;
   font-size:16px;
   color:#fff;
+  height:48px;
+  white-space: nowrap;
+  user-select:none;
 }
 .rsa-bottom-menu{
-    border-top:1px solid #ddd;
-    height:48px;
-  }
+  box-shadow: 0 0 12px 0px rgba(0,0,0,0.1);
+  height:48px;
+  margin:6px;
+  border-radius:8px;
+  font-size:12px;
+  overflow-x:auto;
+}
 .rsa-navigation-item.active{
-  color:#005478;
-  background:#DEF1F9;
+  color:#fff;
+  background:rgba(0,0,0,0.2);
 }
 .rsa-bottom-menu-item{
-    font-size:18px;
+    flex-shrink: 0;
+    padding:0 6px;
 }
   .rsa-bottom-menu-item.active{
-    color:#fff;
-    background:dodgerblue;
+    color:dodgerblue;
   }
 .rsa-bottom-menu-item-text{
-  font-size:14px;
+  white-space: nowrap;
 }
 .rsa-navigation-title{
   color:#FFF;
@@ -187,65 +185,6 @@
   width:100%;
   height: 100%;
   display:flex;
+  position:relative;
 
-}
-.rsa-popup-container{
-  position:fixed;
-  width:calc(100%);
-  left:0;
-  top:0;
-  height:calc(100%);
-  background:rgba(0,0,0,0.4);
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  z-index:10;
-  flex-direction:column;
-}
-.rsa-popup{
-  font-family:IRANSans-light;
-  width:90%;
-  height:90%;
-  border-radius:12px;
-  box-shadow:2px 2px 12px 3px rgb(0 0 0 / 30%)
-}
-.rsa-popup.rtl{
-  direction:rtl;
-}
-.rsa-popup-container.fullscreen .rsa-popup{
-  width:100%;
-  height:100%;
-}
-.rsa-popup-container.bottom-popup{
-  justify-content:flex-end;
-}
-.rsa-popup-container.bottom-popup .rsa-popup{
-  width:100%;
-  height:fit-content;
-}
-.rsa-popup-header{
-  background:#DDD;
-  color:#323130;
-  padding:0 12px;
-}
-.rsa-popup-title{
-  font-size:20px;
-}
-.rsa-popup-body{
-  flex:1;
-}
-.rsa-confirm{
-  background:#fff;
-}
-.rsa-confirm .rsa-popup-body{
-  padding:12px;
-}
-.rsa-popup-footer-button{
-  height:30px;
-  background:dodgerblue;
-  border:none;
-  padding:0 24px;
-  color:#fff;
-  font-family:inherit;
-  border-radius:4px;
 }
