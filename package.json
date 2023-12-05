@@ -1,6 +1,6 @@
 {
   "name": "react-super-app",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,9 +13,9 @@
   "dependencies": {
     "@mdi/js": "7.0.96",
     "@mdi/react": "1.6.1",
-    "aio-popup": "^3.0.5",
-    "aio-storage": "^4.0.1",
-    "react-virtual-dom": "^4.0.2"
+    "aio-popup": "latest",
+    "aio-storage": "latest",
+    "react-virtual-dom": "latest"
   },
   "author": "",
   "license": "ISC",
